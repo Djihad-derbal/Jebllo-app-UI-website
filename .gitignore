@@ -12,3 +12,5 @@ desktop.ini
 *.log
 *.tmp
 _*.ps1
+
+.vercel
