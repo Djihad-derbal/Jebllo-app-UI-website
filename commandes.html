@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jebllo · Commandes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scrim"></div>
+  <div class="app">
+
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html">
+        <span class="brand__mark"><img src="assets/logo.svg" alt="Jebllo" /></span>
+        <span class="brand__name">Jebllo</span>
+      </a>
+      <nav class="nav">
+        <span class="nav__label">Général</span>
+        <a class="nav__item" data-page="dashboard.html" href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+        <a class="nav__item" data-page="analytics.html" href="analytics.html"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M19 9l-5 5-3-3-4 4"/></svg>Analytics</a>
+        <span class="nav__label">Opérations</span>
+        <a class="nav__item" data-page="live.html" href="live.html"><svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Live Ops</a>
+        <a class="nav__item" data-page="commandes.html" href="commandes.html"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Commandes</a>
+        <a class="nav__item" data-page="drivers.html" href="drivers.html"><svg class="icon" viewBox="0 0 24 24"><path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v5H3z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>Drivers</a>
+        <a class="nav__item" data-page="verifications.html" href="verifications.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 4v5c0 4-3 7-7 8-4-1-7-4-7-8V7z"/></svg>Vérifications<span class="nav__badge" id="nav-pending">3</span></a>
+        <span class="nav__label">Catalogue</span>
+        <a class="nav__item" data-page="restaurant.html" href="restaurant.html"><svg class="icon" viewBox="0 0 24 24"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18"/><path d="M16 3c-1.5 0-3 1.5-3 5s1.5 4 3 4 3-.5 3-4-1.5-5-3-5zM16 12v9"/></svg>Restaurant</a>
+        <a class="nav__item" data-page="promotions.html" href="promotions.html"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>Promotions</a>
+        <span class="nav__label">Clients</span>
+        <a class="nav__item" data-page="members.html" href="members.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3 3 0 0 1 0 6M21 20c0-2.6-1.5-4.8-3.6-5.6"/></svg>Members</a>
+        <a class="nav__item" data-page="support.html" href="support.html"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="14" width="4" height="6" rx="1.5"/><rect x="18" y="14" width="4" height="6" rx="1.5"/><path d="M20 18v1a3 3 0 0 1-3 3h-3"/></svg>Support</a>
+        <span class="nav__label">Finance</span>
+        <a class="nav__item" data-page="paiements.html" href="paiements.html"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>Paiements</a>
+        <a class="nav__item" data-page="logs.html" href="logs.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5h11M9 12h11M9 19h11"/><circle cx="4" cy="5" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="19" r="1.4"/></svg>Logs</a>
+        <span class="nav__label">Système</span>
+        <a class="nav__item" data-page="settings.html" href="settings.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0 1-2.7"/></svg>Settings</a>
+      </nav>
+      <div class="sidebar__foot">
+        <a class="nav__item" href="login.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>Logout</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Menu"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div class="topbar__title">Gestion des commandes</div>
+        <div class="topbar__spacer"></div>
+        <button class="icon-btn" aria-label="Notifications"><span class="dot"></span><svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <div class="userchip"><div style="text-align:right"><div class="userchip__name">Anima Agrawal</div><div class="userchip__role">Administrator</div></div><img class="avatar avatar--md" src="assets/av-anima.svg" alt="Anima Agrawal" /></div>
+      </header>
+
+      <main class="content">
+        <div class="page-head">
+          <h1 class="page-title">Commandes</h1>
+        </div>
+
+        <div class="toolbar">
+          <label class="search">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Recherche" data-search="#orders-table" />
+          </label>
+          <div class="page-head__spacer"></div>
+          <div class="filters">
+            <span class="filter"><select><option>Driver</option><option>Rachid H.</option><option>Walid Z.</option></select><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="filter"><select><option>Prix</option><option>0 - 1500</option><option>1500 - 3000</option><option>3000+</option></select><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="filter"><select><option>Date</option><option>Aujourd'hui</option><option>Cette semaine</option></select><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span class="filter"><select data-status-filter="#orders-table"><option value="all">Status</option><option value="encours">En Cours</option><option value="fini">Fini</option></select><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-wrap">
+            <table class="data" id="orders-table">
+              <thead>
+                <tr><th>Order ID</th><th>Restaurant</th><th>Driver</th><th>Customer</th><th>Price</th><th>Date &amp; heure</th><th>Statut</th></tr>
+              </thead>
+              <tbody>
+                <tr data-status="encours" data-order="ORD-8821">
+                  <td class="cell-id">#ORD-8821</td>
+                  <td><div class="cell-media"><img src="assets/food-1.svg" alt=""><span class="cell-media__name">Chicken Street</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-6.svg" alt=""><span class="cell-media__name">Rachid H.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-1.svg" alt=""><span class="cell-media__name">Yacine B.</span> <span class="badge badge--return">Retour</span></div></td>
+                  <td>2 500 DZD</td><td class="cell-muted">13 Juin 2026<span class="cell-time">14:32</span></td>
+                  <td><span class="badge badge--info"><span class="dot"></span>En Cours</span></td>
+                </tr>
+                <tr data-status="fini" data-order="ORD-8820">
+                  <td class="cell-id">#ORD-8820</td>
+                  <td><div class="cell-media"><img src="assets/food-2.svg" alt=""><span class="cell-media__name">STEACK RESTO</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-7.svg" alt=""><span class="cell-media__name">Mehdi B.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-2.svg" alt=""><span class="cell-media__name">Lina K.</span> <span class="badge badge--return">Retour</span></div></td>
+                  <td>1 800 DZD</td><td class="cell-muted">13 Juin 2026<span class="cell-time">13:10</span></td>
+                  <td><span class="badge badge--success"><span class="dot"></span>Fini</span></td>
+                </tr>
+                <tr data-status="encours" data-order="ORD-8819">
+                  <td class="cell-id">#ORD-8819</td>
+                  <td><div class="cell-media"><img src="assets/food-3.svg" alt=""><span class="cell-media__name">Pizza Nova</span></div></td>
+                  <td><span class="searching"><span class="dot"></span>Searching…</span></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-3.svg" alt=""><span class="cell-media__name">Sofiane M.</span> <span class="badge badge--lime">First Order</span></div></td>
+                  <td>3 200 DZD</td><td class="cell-muted">12 Juin 2026<span class="cell-time">20:45</span></td>
+                  <td><span class="badge badge--info"><span class="dot"></span>En Cours</span></td>
+                </tr>
+                <tr data-status="fini" data-order="ORD-8818">
+                  <td class="cell-id">#ORD-8818</td>
+                  <td><div class="cell-media"><img src="assets/food-4.svg" alt=""><span class="cell-media__name">Tacos Time</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-9.svg" alt=""><span class="cell-media__name">Walid Z.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-4.svg" alt=""><span class="cell-media__name">Amel D.</span></div></td>
+                  <td>1 200 DZD</td><td class="cell-muted">12 Juin 2026<span class="cell-time">12:05</span></td>
+                  <td><span class="badge badge--success"><span class="dot"></span>Fini</span></td>
+                </tr>
+                <tr data-status="fini" data-order="ORD-8817">
+                  <td class="cell-id">#ORD-8817</td>
+                  <td><div class="cell-media"><img src="assets/food-5.svg" alt=""><span class="cell-media__name">Fried House</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-6.svg" alt=""><span class="cell-media__name">Rachid H.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-5.svg" alt=""><span class="cell-media__name">Nadir K.</span></div></td>
+                  <td>2 100 DZD</td><td class="cell-muted">11 Juin 2026<span class="cell-time">19:22</span></td>
+                  <td><span class="badge badge--success"><span class="dot"></span>Fini</span></td>
+                </tr>
+                <tr data-status="encours" data-order="ORD-8816">
+                  <td class="cell-id">#ORD-8816</td>
+                  <td><div class="cell-media"><img src="assets/food-6.svg" alt=""><span class="cell-media__name">Sandwich Bar</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-7.svg" alt=""><span class="cell-media__name">Mehdi B.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-8.svg" alt=""><span class="cell-media__name">Sara C.</span></div></td>
+                  <td>950 DZD</td><td class="cell-muted">11 Juin 2026<span class="cell-time">13:48</span></td>
+                  <td><span class="badge badge--info"><span class="dot"></span>En Cours</span></td>
+                </tr>
+                <tr data-status="fini" data-order="ORD-8815">
+                  <td class="cell-id">#ORD-8815</td>
+                  <td><div class="cell-media"><img src="assets/food-7.svg" alt=""><span class="cell-media__name">Pasta Club</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-9.svg" alt=""><span class="cell-media__name">Walid Z.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-10.svg" alt=""><span class="cell-media__name">Karim D.</span></div></td>
+                  <td>2 800 DZD</td><td class="cell-muted">10 Juin 2026<span class="cell-time">21:15</span></td>
+                  <td><span class="badge badge--success"><span class="dot"></span>Fini</span></td>
+                </tr>
+                <tr data-status="fini" data-order="ORD-8814">
+                  <td class="cell-id">#ORD-8814</td>
+                  <td><div class="cell-media"><img src="assets/food-8.svg" alt=""><span class="cell-media__name">Snack Express</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-6.svg" alt=""><span class="cell-media__name">Rachid H.</span></div></td>
+                  <td><div class="cell-media"><img class="avatar" src="assets/av-11.svg" alt=""><span class="cell-media__name">Hana A.</span></div></td>
+                  <td>1 500 DZD</td><td class="cell-muted">10 Juin 2026<span class="cell-time">12:40</span></td>
+                  <td><span class="badge badge--success"><span class="dot"></span>Fini</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== ORDER DETAIL SLIDE-OVER ===================== -->
+  <div class="slideover" id="order-detail">
+    <div class="slideover__scrim" data-od-close></div>
+    <div class="slideover__panel">
+      <div class="od-head">
+        <button class="back" data-od-close aria-label="Retour"><svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div>
+          <div class="od-head__name" id="od-resto">Chicken Street Restaurant</div>
+          <div class="od-head__sub">Delivery Details · <span id="od-code">#ORD-8821</span> · <span id="od-time">14:32</span></div>
+        </div>
+      </div>
+      <div class="od-body">
+        <div class="flag" id="od-client-flag" style="display:none"><svg class="icon" viewBox="0 0 24 24"></svg><span></span></div>
+        <div class="od-section">
+          <h4>Adresse de livraison</h4>
+          <div class="od-row">
+            <span class="od-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <div><div class="od-row__title">Current Location</div><div class="od-row__sub" id="od-address">Cité 200 Logements, Bât B, Blida</div></div>
+          </div>
+        </div>
+        <div class="od-section">
+          <h4>Destinataire</h4>
+          <div class="od-row">
+            <img class="avatar" id="od-recipient-avatar" src="assets/av-1.svg" style="width:36px;height:36px" alt="">
+            <div><div class="od-row__title" id="od-recipient-name">Yacine Belkacem</div><div class="od-row__sub" id="od-recipient-phone">+213 661 23 45 67</div></div>
+          </div>
+        </div>
+        <div class="od-section">
+          <h4>Your Items</h4>
+          <div class="od-items" id="od-items"></div>
+          <div class="od-totals">
+            <div class="line"><span>Subtotal</span><span id="od-subtotal">2 700 DZD</span></div>
+            <div class="line promo"><span>Promotion</span><span id="od-promo">− 200 DZD</span></div>
+            <div class="line"><span>Delivery fee</span><span id="od-delivery">150 DZD</span></div>
+            <div class="line"><span>Taxes &amp; Other fees</span><span id="od-taxes">50 DZD</span></div>
+            <div class="line total"><span>Total</span><span id="od-total">2 700 DZD</span></div>
+          </div>
+        </div>
+        <div class="driver-card" id="od-driver-card">
+          <img id="od-driver-avatar" src="assets/av-6.svg" alt="">
+          <div><div class="driver-card__name" id="od-driver-name">Rachid Hamidi</div><div class="driver-card__role" id="od-driver-role">Driver · Honda PCX</div></div>
+          <span class="stars">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l2.9 6 6.6.6-5 4.3 1.5 6.5L12 16l-6 3.4 1.5-6.5-5-4.3 6.6-.6z"/></svg>
+            <span id="od-driver-rating">4.9</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Per-order mock data, keyed by order id
+    var ORDERS = {
+      "ORD-8821": { resto:"Chicken Street Restaurant", address:"Cité 200 Logements, Bât B, Blida", time:"13 Juin 2026 · 14:32",
+        client:{type:"return", visits:8},
+        recipient:{name:"Yacine Belkacem", phone:"+213 661 23 45 67", avatar:"assets/av-1.svg"},
+        driver:{name:"Rachid Hamidi", role:"Driver · Honda PCX", avatar:"assets/av-6.svg", rating:"4.9"},
+        items:[ {img:"assets/food-1.svg", name:"Chicken Burger", opt:"Extra cheese · Spicy", qty:2, price:"1 600 DZD", was:"1 800 DZD"},
+                {img:"assets/food-8.svg", name:"Frites maison", opt:"Large", qty:1, price:"400 DZD"},
+                {img:"assets/food-6.svg", name:"Coca-Cola", opt:"33cl", qty:2, price:"300 DZD"} ],
+        totals:{sub:"2 300 DZD", promo:"− 200 DZD", delivery:"150 DZD", taxes:"50 DZD", total:"2 500 DZD"} },
+      "ORD-8820": { resto:"STEACK RESTO", address:"Rue Larbi Tebessi, Blida", time:"13 Juin 2026 · 13:10",
+        client:{type:"return", visits:5},
+        recipient:{name:"Lina Kaci", phone:"+213 770 11 22 33", avatar:"assets/av-2.svg"},
+        driver:{name:"Mehdi Boudjema", role:"Driver · Yamaha NMAX", avatar:"assets/av-7.svg", rating:"4.7"},
+        items:[ {img:"assets/food-2.svg", name:"Steak Frites", opt:"Saignant", qty:1, price:"950 DZD"},
+                {img:"assets/food-6.svg", name:"Coca-Cola", opt:"33cl", qty:2, price:"300 DZD"} ],
+        totals:{sub:"1 550 DZD", promo:"− 100 DZD", delivery:"150 DZD", taxes:"200 DZD", total:"1 800 DZD"} },
+      "ORD-8819": { resto:"Pizza Nova", address:"Cité Ben Boulaid, Bloc 12, Blida", time:"12 Juin 2026 · 20:45",
+        client:{type:"new", visits:1},
+        recipient:{name:"Sofiane Meziane", phone:"+213 661 99 88 77", avatar:"assets/av-3.svg"},
+        driver:null,
+        items:[ {img:"assets/food-3.svg", name:"Pizza Pepperoni", opt:"Large", qty:1, price:"550 DZD"},
+                {img:"assets/food-7.svg", name:"Pâtes Bolognaise", opt:"", qty:1, price:"650 DZD"} ],
+        totals:{sub:"1 200 DZD", promo:"− 0 DZD", delivery:"200 DZD", taxes:"1 800 DZD", total:"3 200 DZD"} },
+      "ORD-8818": { resto:"Tacos Time", address:"Boulevard Mohamed Boudiaf, Blida", time:"12 Juin 2026 · 12:05",
+        client:{type:"return", visits:3},
+        recipient:{name:"Amel Dahmani", phone:"+213 662 45 67 89", avatar:"assets/av-4.svg"},
+        driver:{name:"Walid Zeroual", role:"Driver · Honda PCX", avatar:"assets/av-9.svg", rating:"4.6"},
+        items:[ {img:"assets/food-4.svg", name:"Tacos Poulet", opt:"Sauce algérienne", qty:1, price:"800 DZD"},
+                {img:"assets/food-8.svg", name:"Frites", opt:"Moyenne", qty:1, price:"250 DZD"} ],
+        totals:{sub:"1 050 DZD", promo:"− 50 DZD", delivery:"150 DZD", taxes:"50 DZD", total:"1 200 DZD"} }
+    };
+
+    (function(){
+      var panel = document.getElementById('order-detail');
+      function set(id, val){ var el = document.getElementById(id); if(el) el.textContent = val; }
+      function render(code){
+        var o = ORDERS[code];
+        set('od-code', '#' + code);
+        if (!o) return;
+        set('od-resto', o.resto);
+        set('od-time', o.time || '');
+        set('od-address', o.address);
+        document.getElementById('od-recipient-avatar').src = o.recipient.avatar;
+        set('od-recipient-name', o.recipient.name);
+        set('od-recipient-phone', o.recipient.phone);
+        document.getElementById('od-items').innerHTML = o.items.map(function(it){
+          var price = it.was ? (it.price + '<s>' + it.was + '</s>') : it.price;
+          return '<div class="od-item"><img src="'+it.img+'" alt="">'
+            + '<div><div class="od-item__name">'+it.name+'</div>'
+            + '<div class="od-item__opt">'+(it.opt||'')+'</div>'
+            + '<div class="od-item__qty">x'+it.qty+'</div></div>'
+            + '<div class="od-item__price">'+price+'</div></div>';
+        }).join('');
+        set('od-subtotal', o.totals.sub); set('od-promo', o.totals.promo);
+        set('od-delivery', o.totals.delivery); set('od-taxes', o.totals.taxes); set('od-total', o.totals.total);
+        var dc = document.getElementById('od-driver-card');
+        if (o.driver){ dc.style.display='';
+          document.getElementById('od-driver-avatar').src = o.driver.avatar;
+          set('od-driver-name', o.driver.name); set('od-driver-role', o.driver.role); set('od-driver-rating', o.driver.rating);
+        } else { dc.style.display='none'; }
+        renderClientFlag(o);
+      }
+      // first-time vs returning client banner + toast notification
+      var STAR = '<path d="M12 2l2.9 6 6.6.6-5 4.3 1.5 6.5L12 16l-6 3.4 1.5-6.5-5-4.3 6.6-.6z"/>';
+      var REPEAT = '<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>';
+      function ordinal(n){ return n === 1 ? '1ʳᵉ' : n + 'ᵉ'; }
+      function renderClientFlag(o){
+        var flag = document.getElementById('od-client-flag');
+        if (!o.client){ flag.style.display='none'; return; }
+        var first = o.client.type === 'new';
+        flag.className = 'flag ' + (first ? 'flag--new' : 'flag--return');
+        flag.querySelector('svg').innerHTML = first ? STAR : REPEAT;
+        flag.querySelector('span').textContent = first
+          ? '🎉 Première commande de ' + o.recipient.name + ' sur Jebllo !'
+          : '🔁 Client fidèle — ' + ordinal(o.client.visits) + ' commande de ' + o.recipient.name + '.';
+        flag.style.display = '';
+      }
+      var lastToast = null;
+      function clientToast(code){
+        var o = ORDERS[code]; if (!o || !o.client || !window.Jebllo) return;
+        if (lastToast === code) return; lastToast = code;
+        Jebllo.toast(o.client.type === 'new'
+          ? '🎉 ' + o.recipient.name + ' — première commande !'
+          : '🔁 ' + o.recipient.name + ' est un client de retour (' + ordinal(o.client.visits) + ')');
+      }
+      document.querySelectorAll('#orders-table tbody tr').forEach(function(row){
+        row.addEventListener('click', function(){
+          var code = row.getAttribute('data-order') || '';
+          render(code);
+          clientToast(code);
+          panel.classList.add('is-open');
+        });
+      });
+      panel.querySelectorAll('[data-od-close]').forEach(function(el){
+        el.addEventListener('click', function(){ panel.classList.remove('is-open'); });
+      });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') panel.classList.remove('is-open'); });
+    })();
+  </script>
+</body>
+</html>
