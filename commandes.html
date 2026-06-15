@@ -56,6 +56,8 @@
       <main class="content">
         <div class="page-head">
           <h1 class="page-title">Commandes</h1>
+          <div class="page-head__spacer"></div>
+          <button class="btn btn--lime" id="add-order"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nouvelle commande</button>
         </div>
 
         <div class="toolbar">
@@ -76,7 +78,7 @@
           <div class="table-wrap">
             <table class="data" id="orders-table">
               <thead>
-                <tr><th>Order ID</th><th>Restaurant</th><th>Driver</th><th>Customer</th><th>Price</th><th>Date &amp; heure</th><th>Statut</th></tr>
+                <tr><th>Order ID</th><th>Restaurant</th><th>Driver</th><th>Customer</th><th>Price</th><th>Date &amp; heure</th><th>Statut</th><th></th></tr>
               </thead>
               <tbody>
                 <tr data-status="encours" data-order="ORD-8821">
@@ -201,6 +203,31 @@
     </div>
   </div>
 
+  <!-- ===================== ADD / EDIT ORDER MODAL ===================== -->
+  <div class="modal" id="modal-order">
+    <div class="modal__scrim" data-modal-close></div>
+    <div class="modal__box">
+      <div class="modal__head"><h3 id="mo-title">Nouvelle commande</h3><button class="modal__close" data-modal-close aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      <div class="modal__body">
+        <div class="field"><label>Restaurant</label><input class="input" id="mo-resto" placeholder="ex. Chicken Street"></div>
+        <div class="field-row">
+          <div class="field"><label>Client</label><input class="input" id="mo-customer" placeholder="ex. Yacine B."></div>
+          <div class="field"><label>Type de client</label><select class="input" id="mo-ctype"><option value="">Régulier</option><option value="new">Nouveau (1ʳᵉ)</option><option value="return">Retour</option></select></div>
+        </div>
+        <div class="field"><label>Driver <span style="color:var(--text-faint);font-weight:400">— vide = « Searching… »</span></label><input class="input" id="mo-driver" placeholder="ex. Rachid H."></div>
+        <div class="field-row">
+          <div class="field"><label>Prix (DZD)</label><input class="input" id="mo-price" placeholder="ex. 2 500"></div>
+          <div class="field"><label>Statut</label><select class="input" id="mo-status"><option value="encours">En Cours</option><option value="fini">Fini</option></select></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Date</label><input class="input" id="mo-date" placeholder="ex. 13 Juin 2026"></div>
+          <div class="field"><label>Heure</label><input class="input" id="mo-time" placeholder="ex. 14:32"></div>
+        </div>
+      </div>
+      <div class="modal__foot"><button class="btn btn--ghost" data-modal-close>Annuler</button><button class="btn btn--lime" id="mo-save">Enregistrer</button></div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
   <script>
     // Per-order mock data, keyed by order id
@@ -289,18 +316,163 @@
           ? '🎉 ' + o.recipient.name + ' — première commande !'
           : '🔁 ' + o.recipient.name + ' est un client de retour (' + ordinal(o.client.visits) + ')');
       }
-      document.querySelectorAll('#orders-table tbody tr').forEach(function(row){
-        row.addEventListener('click', function(){
-          var code = row.getAttribute('data-order') || '';
-          render(code);
-          clientToast(code);
-          panel.classList.add('is-open');
-        });
+      document.querySelector('#orders-table tbody').addEventListener('click', function(e){
+        if (e.target.closest('.row-actions')) return;       // let edit/delete buttons handle their own clicks
+        var row = e.target.closest('tr'); if (!row) return;
+        var code = row.getAttribute('data-order') || '';
+        render(code);
+        clientToast(code);
+        panel.classList.add('is-open');
       });
       panel.querySelectorAll('[data-od-close]').forEach(function(el){
         el.addEventListener('click', function(){ panel.classList.remove('is-open'); });
       });
       document.addEventListener('keydown', function(e){ if(e.key==='Escape') panel.classList.remove('is-open'); });
+    })();
+  </script>
+
+  <script>
+    /* ===================== COMMANDES CRUD ===================== */
+    (function () {
+      var modal = document.getElementById('modal-order');
+      var tbody = document.querySelector('#orders-table tbody');
+      if (!modal || !tbody) return;
+
+      var FOODS = ['food-1','food-2','food-3','food-4','food-5','food-6','food-7','food-8','food-9'];
+      var AVS = ['av-1','av-2','av-3','av-4','av-5','av-6','av-7','av-8','av-9','av-10','av-11','av-12'];
+      var MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+      var ICON_EDIT = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+      var ICON_DEL = '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
+      var editing = null;
+
+      function v(id){ return document.getElementById(id).value.trim(); }
+      function fill(id, val){ document.getElementById(id).value = val; }
+      function pick(a){ return a[Math.floor(Math.random() * a.length)]; }
+      function todayFr(){ var d = new Date(); return ('0'+d.getDate()).slice(-2)+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
+      function nowHM(){ var d = new Date(); return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+
+      function statusBadge(s){ return s === 'fini'
+        ? '<span class="badge badge--success"><span class="dot"></span>Fini</span>'
+        : '<span class="badge badge--info"><span class="dot"></span>En Cours</span>'; }
+      function custBadge(t){ return t === 'new' ? ' <span class="badge badge--lime">First Order</span>'
+        : (t === 'return' ? ' <span class="badge badge--return">Retour</span>' : ''); }
+      function driverCell(d){ return d.driver
+        ? '<div class="cell-media"><img class="avatar" src="assets/'+d.driverAv+'.svg" alt=""><span class="cell-media__name">'+d.driver+'</span></div>'
+        : '<span class="searching"><span class="dot"></span>Searching…</span>'; }
+      function actionsCell(code){ return '<td><div class="row-actions">'
+        + '<button class="act" aria-label="Modifier">'+ICON_EDIT+'</button>'
+        + '<button class="act act--del" aria-label="Supprimer" data-confirm-delete="#'+code+'">'+ICON_DEL+'</button></div></td>'; }
+
+      function fillRow(tr, d){
+        tr.setAttribute('data-status', d.status);
+        tr.setAttribute('data-order', d.code);
+        tr.innerHTML =
+            '<td class="cell-id">#'+d.code+'</td>'
+          + '<td><div class="cell-media"><img src="assets/'+d.restoImg+'.svg" alt=""><span class="cell-media__name">'+d.resto+'</span></div></td>'
+          + '<td>'+driverCell(d)+'</td>'
+          + '<td><div class="cell-media"><img class="avatar" src="assets/'+d.custAv+'.svg" alt=""><span class="cell-media__name">'+d.customer+'</span>'+custBadge(d.ctype)+'</div></td>'
+          + '<td>'+d.price+'</td>'
+          + '<td class="cell-muted">'+d.date+'<span class="cell-time">'+d.time+'</span></td>'
+          + '<td>'+statusBadge(d.status)+'</td>'
+          + actionsCell(d.code);
+      }
+
+      function readRow(tr){
+        var c = tr.children;
+        var dm = c[2].querySelector('.cell-media');
+        var dateCell = c[5];
+        var timeEl = dateCell.querySelector('.cell-time');
+        return {
+          code: c[0].textContent.replace('#','').trim(),
+          resto: c[1].querySelector('.cell-media__name').textContent.trim(),
+          restoImg: (c[1].querySelector('img').getAttribute('src').match(/food-\d+/) || ['food-1'])[0],
+          driver: dm ? dm.querySelector('.cell-media__name').textContent.trim() : '',
+          driverAv: dm ? (dm.querySelector('img').getAttribute('src').match(/av-\d+/) || ['av-6'])[0] : 'av-6',
+          customer: c[3].querySelector('.cell-media__name').textContent.trim(),
+          custAv: (c[3].querySelector('img').getAttribute('src').match(/av-\d+/) || ['av-1'])[0],
+          ctype: c[3].querySelector('.badge--lime') ? 'new' : (c[3].querySelector('.badge--return') ? 'return' : ''),
+          price: c[4].textContent.trim(),
+          date: dateCell.childNodes[0] ? dateCell.childNodes[0].textContent.trim() : '',
+          time: timeEl ? timeEl.textContent.trim() : '',
+          status: tr.getAttribute('data-status') || 'encours'
+        };
+      }
+
+      // build a slide-over detail object so created/edited orders open coherently
+      function buildDetail(d){
+        return {
+          resto: d.resto, address: 'Adresse de livraison, Blida', time: d.date + ' · ' + d.time,
+          client: d.ctype === 'new' ? { type:'new', visits:1 } : (d.ctype === 'return' ? { type:'return', visits:2 } : null),
+          recipient: { name: d.customer, phone: '+213 — — —', avatar: 'assets/'+d.custAv+'.svg' },
+          driver: d.driver ? { name: d.driver, role: 'Driver', avatar: 'assets/'+d.driverAv+'.svg', rating: '4.8' } : null,
+          items: [ { img: 'assets/'+d.restoImg+'.svg', name: 'Articles de la commande', opt: '', qty: 1, price: d.price } ],
+          totals: { sub: d.price, promo: '− 0 DZD', delivery: '—', taxes: '—', total: d.price }
+        };
+      }
+
+      function genCode(){
+        var max = 8821;
+        tbody.querySelectorAll('tr[data-order]').forEach(function(tr){
+          var m = (tr.getAttribute('data-order') || '').match(/(\d+)/); if (m) max = Math.max(max, +m[1]);
+        });
+        return 'ORD-' + (max + 1);
+      }
+
+      function openOrderModal(tr){
+        editing = tr || null;
+        document.getElementById('mo-title').textContent = tr ? 'Modifier la commande' : 'Nouvelle commande';
+        var d = tr ? readRow(tr) : { resto:'', customer:'', ctype:'', driver:'', price:'', date: todayFr(), time: nowHM(), status:'encours' };
+        fill('mo-resto', d.resto); fill('mo-customer', d.customer); fill('mo-ctype', d.ctype);
+        fill('mo-driver', d.driver); fill('mo-price', (d.price || '').replace(/\s*DZD$/i, ''));
+        fill('mo-date', d.date); fill('mo-time', d.time); fill('mo-status', d.status);
+        Jebllo.openModal(modal);
+      }
+
+      // give the static rows an actions cell + backfill ORDERS so every row opens a detail
+      tbody.querySelectorAll('tr').forEach(function(tr){
+        if (!tr.querySelector('.row-actions')) tr.insertAdjacentHTML('beforeend', actionsCell(tr.getAttribute('data-order') || ''));
+        var code = tr.getAttribute('data-order');
+        if (code && window.ORDERS && !window.ORDERS[code]) window.ORDERS[code] = buildDetail(readRow(tr));
+      });
+
+      document.getElementById('add-order').addEventListener('click', function(){ openOrderModal(null); });
+      tbody.addEventListener('click', function(e){
+        var editBtn = e.target.closest('.act[aria-label="Modifier"]');
+        if (editBtn) openOrderModal(editBtn.closest('tr'));
+      });
+
+      document.getElementById('mo-save').addEventListener('click', function(){
+        var price = v('mo-price') || '0';
+        if (!/dzd$/i.test(price)) price += ' DZD';
+        var base = editing ? readRow(editing) : {};
+        var d = {
+          resto: v('mo-resto') || 'Restaurant',
+          customer: v('mo-customer') || 'Client',
+          ctype: v('mo-ctype'),
+          driver: v('mo-driver'),
+          price: price,
+          date: v('mo-date') || todayFr(),
+          time: v('mo-time') || nowHM(),
+          status: v('mo-status'),
+          restoImg: base.restoImg || pick(FOODS),
+          custAv: base.custAv || pick(AVS),
+          driverAv: base.driverAv || pick(AVS),
+          code: base.code || genCode()
+        };
+        if (editing) {
+          fillRow(editing, d);
+          Jebllo.log('update', 'Commande modifiée', '#'+d.code+' — '+d.resto+' → '+d.customer+'.');
+          Jebllo.toast('Commande #'+d.code+' mise à jour');
+        } else {
+          var tr = document.createElement('tr');
+          fillRow(tr, d);
+          tbody.insertBefore(tr, tbody.firstChild);
+          Jebllo.log('order', 'Commande créée', '#'+d.code+' — '+d.resto+' ('+d.price+').');
+          Jebllo.toast('Commande #'+d.code+' créée');
+        }
+        if (window.ORDERS) window.ORDERS[d.code] = buildDetail(d);
+        Jebllo.closeModal(modal);
+      });
     })();
   </script>
 </body>
