@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -61,6 +63,26 @@
           <div>
             <div class="detail-head__name">STEACK RESTO</div>
             <div class="detail-head__sub">Steak · Grillades · Burger · <span class="status-online"><span class="dot"></span>Online</span></div>
+          </div>
+        </div>
+
+        <!-- owner account + location -->
+        <div class="detail-info">
+          <div class="detail-info__card detail-info__card--owner">
+            <h4>Compte du restaurant</h4>
+            <div class="cell-media">
+              <img class="avatar avatar--md" src="assets/av-2.svg" alt="Lina Kaci">
+              <div>
+                <span class="cell-media__name">Lina Kaci</span>
+                <span class="cell-media__sub">+213 770 11 22 33 · Alger</span>
+              </div>
+            </div>
+            <a class="detail-info__link" href="member-detail.html?name=Lina%20Kaci&av=av-2&phone=%2B213%20770%2011%2022%2033&wilaya=Alger&join=28%20Jan%202025&status=online">Voir le profil du compte →</a>
+          </div>
+          <div class="detail-info__card">
+            <h4>Localisation</h4>
+            <div class="map-pick map-pick--view" id="rd-map" data-lat="36.7538" data-lng="3.0588"></div>
+            <div class="map-pick__coords"><span id="rd-coords">36.75380, 3.05880</span></div>
           </div>
         </div>
 
@@ -258,6 +280,20 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    // read-only location map (shows where the restaurant is)
+    (function(){
+      var el = document.getElementById('rd-map');
+      if (!el || typeof L === 'undefined') return;
+      var lat = parseFloat(el.dataset.lat), lng = parseFloat(el.dataset.lng);
+      var map = L.map(el, { scrollWheelZoom: false }).setView([lat, lng], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '© OpenStreetMap'
+      }).addTo(map);
+      L.marker([lat, lng]).addTo(map);
+      setTimeout(function(){ map.invalidateSize(); }, 80);
+    })();
+  </script>
   <script>
     // category pill toggle (delegated so new pills work too)
     document.addEventListener('click', function(e){

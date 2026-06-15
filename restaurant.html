@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -85,9 +87,16 @@
       <div class="modal__body">
         <div class="field"><label>Nom du restaurant</label><input class="input" id="mr-name" placeholder="ex. Chicken Street Restaurant"></div>
         <div class="field"><label>Cuisine (séparée par ·)</label><input class="input" id="mr-tags" placeholder="ex. Burger · Naan · fried chicken"></div>
-        <div class="field-row">
-          <div class="field"><label>Note</label><input class="input" id="mr-rating" placeholder="4.7"></div>
-          <div class="field"><label>Status</label><select class="input" id="mr-status"><option value="online">Online</option><option value="offline">Offline</option></select></div>
+        <div class="field">
+          <label>Compte associé</label>
+          <select class="input" id="mr-account"></select>
+          <div class="upload__hint">Ce compte client deviendra le compte du restaurant.</div>
+        </div>
+        <div class="field"><label>Status</label><select class="input" id="mr-status"><option value="online">Online</option><option value="offline">Offline</option></select></div>
+        <div class="field">
+          <label>Localisation</label>
+          <div class="map-pick" id="mr-map"></div>
+          <div class="map-pick__coords">Cliquez sur la carte ou déplacez le repère · <span id="mr-coords">—</span></div>
         </div>
         <div class="field"><label>Visuel</label>
           <div class="upload">
@@ -112,20 +121,34 @@
       var editing = null;
       var currentImg = 'food-1'; // 'food-N' preset or a pasted/uploaded data URL
       function imgSrc(v){ return (v && (v.indexOf('data:') === 0 || v.indexOf('/') > -1)) ? v : 'assets/' + v + '.svg'; }
-      var STAR = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 2l2.9 6 6.6.6-5 4.3 1.5 6.5L12 16l-6 3.4 1.5-6.5-5-4.3 6.6-.6z"/></svg>';
       var EDIT = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
       var DEL  = '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
+      var USER = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>';
+
+      // Existing client accounts (mirrors the Members page). The chosen one becomes the restaurant's account.
+      var ACCOUNTS = [
+        "Yacine Belkacem","Lina Kaci","Sofiane Meziane","Amel Dahmani","Nadir Khelifi",
+        "Sara Cherif","Karim Daoudi","Hana Amrani","Wassim Zidane"
+      ];
+      var DEFAULT_LOC = { lat: 36.4703, lng: 2.8277 }; // Blida
+
+      // Populate the account selector
+      (function(){
+        var sel = document.getElementById('mr-account');
+        sel.innerHTML = '<option value="">Choisir un compte client…</option>'
+          + ACCOUNTS.map(function(n){ return '<option value="'+n+'">'+n+'</option>'; }).join('');
+      })();
 
       var RESTOS = [
-        {name:"Chicken Street Restaurant", tags:"Burger · Naan · fried chicken", rating:"4.7", status:"online", img:"food-1"},
-        {name:"STEACK RESTO", tags:"Steak · Grillades · Burger", rating:"4.9", status:"online", img:"food-2"},
-        {name:"Pizza Nova", tags:"Pizza · Pâtes · Calzone", rating:"4.5", status:"offline", img:"food-3"},
-        {name:"Tacos Time", tags:"Tacos · Sandwichs · Frites", rating:"4.6", status:"online", img:"food-4"},
-        {name:"Fried House", tags:"Fried chicken · Wings · Naan", rating:"4.4", status:"online", img:"food-5"},
-        {name:"Sandwich Bar", tags:"Sandwichs · Paninis · Salades", rating:"4.3", status:"offline", img:"food-6"},
-        {name:"Pasta Club", tags:"Pâtes · Lasagnes · Pizza", rating:"4.8", status:"online", img:"food-7"},
-        {name:"Snack Express", tags:"Frites · Burgers · Tacos", rating:"4.2", status:"online", img:"food-8"},
-        {name:"Naan Corner", tags:"Naan · Tandoori · Curry", rating:"4.7", status:"online", img:"food-9"}
+        {name:"Chicken Street Restaurant", tags:"Burger · Naan · fried chicken", account:"Yacine Belkacem", status:"online", img:"food-1", lat:36.4712, lng:2.8290},
+        {name:"STEACK RESTO", tags:"Steak · Grillades · Burger", account:"Lina Kaci", status:"online", img:"food-2", lat:36.7538, lng:3.0588},
+        {name:"Pizza Nova", tags:"Pizza · Pâtes · Calzone", account:"Sofiane Meziane", status:"offline", img:"food-3", lat:36.4680, lng:2.8320},
+        {name:"Tacos Time", tags:"Tacos · Sandwichs · Frites", account:"Amel Dahmani", status:"online", img:"food-4", lat:36.7620, lng:3.0510},
+        {name:"Fried House", tags:"Fried chicken · Wings · Naan", account:"Nadir Khelifi", status:"online", img:"food-5", lat:36.4650, lng:2.8200},
+        {name:"Sandwich Bar", tags:"Sandwichs · Paninis · Salades", account:"Sara Cherif", status:"offline", img:"food-6", lat:36.5900, lng:2.8900},
+        {name:"Pasta Club", tags:"Pâtes · Lasagnes · Pizza", account:"Karim Daoudi", status:"online", img:"food-7", lat:36.7700, lng:3.0600},
+        {name:"Snack Express", tags:"Frites · Burgers · Tacos", account:"Hana Amrani", status:"online", img:"food-8", lat:36.4730, lng:2.8350},
+        {name:"Naan Corner", tags:"Naan · Tandoori · Curry", account:"Wassim Zidane", status:"online", img:"food-9", lat:36.7500, lng:3.0420}
       ];
 
       function buildCard(d){
@@ -133,8 +156,10 @@
         card.className = 'resto-card';
         card.setAttribute('data-filter-item','');
         card.setAttribute('data-removable','');
-        card.dataset.name = d.name; card.dataset.tags = d.tags; card.dataset.rating = d.rating;
+        card.dataset.name = d.name; card.dataset.tags = d.tags; card.dataset.account = d.account || '';
         card.dataset.status = d.status; card.dataset.img = d.img;
+        card.dataset.lat = (d.lat != null ? d.lat : '');
+        card.dataset.lng = (d.lng != null ? d.lng : '');
         var statusPill = d.status === 'online'
           ? '<span class="resto-card__status badge badge--online"><span class="dot"></span>Online</span>'
           : '<span class="resto-card__status badge badge--danger">Offline</span>';
@@ -148,24 +173,51 @@
           + '<div class="resto-card__body">'
           + '<div class="resto-card__name">'+d.name+'</div>'
           + '<div class="resto-card__tags">'+d.tags+'</div>'
-          + '<div class="resto-card__foot"><span class="stars">'+STAR+'<span>'+d.rating+'</span></span>'
+          + '<div class="resto-card__foot"><span class="resto-card__owner">'+USER+'<span>'+(d.account || '—')+'</span></span>'
           + '<a href="restaurant-detail.html">Voir le menu →</a></div></div>';
         return card;
       }
       function renderAll(){ grid.innerHTML=''; RESTOS.forEach(function(d){ grid.appendChild(buildCard(d)); }); }
       renderAll();
 
+      /* ---- Leaflet location picker (created lazily on first open) ---- */
+      var map = null, marker = null, selected = null;
+      function setCoords(lat, lng){
+        selected = { lat: lat, lng: lng };
+        document.getElementById('mr-coords').textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+      }
+      function ensureMap(){
+        if (map || typeof L === 'undefined') return;
+        map = L.map('mr-map', { scrollWheelZoom: true }).setView([DEFAULT_LOC.lat, DEFAULT_LOC.lng], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19, attribution: '© OpenStreetMap'
+        }).addTo(map);
+        marker = L.marker([DEFAULT_LOC.lat, DEFAULT_LOC.lng], { draggable: true }).addTo(map);
+        marker.on('dragend', function(){ var p = marker.getLatLng(); setCoords(p.lat, p.lng); });
+        map.on('click', function(e){ marker.setLatLng(e.latlng); setCoords(e.latlng.lat, e.latlng.lng); });
+      }
+
       function openModal(card){
         editing = card || null;
         document.getElementById('mr-title').textContent = card ? 'Modifier le restaurant' : 'Nouveau restaurant';
         document.getElementById('mr-name').value = card ? card.dataset.name : '';
         document.getElementById('mr-tags').value = card ? card.dataset.tags : '';
-        document.getElementById('mr-rating').value = card ? card.dataset.rating : '4.5';
+        document.getElementById('mr-account').value = card ? (card.dataset.account || '') : '';
         document.getElementById('mr-status').value = card ? card.dataset.status : 'online';
         currentImg = card ? card.dataset.img : 'food-1';
         document.getElementById('mr-preview').src = imgSrc(currentImg);
         document.getElementById('mr-file').value = '';
+
+        var lat = card && card.dataset.lat ? parseFloat(card.dataset.lat) : DEFAULT_LOC.lat;
+        var lng = card && card.dataset.lng ? parseFloat(card.dataset.lng) : DEFAULT_LOC.lng;
+        setCoords(lat, lng);
+
         Jebllo.openModal(modal);
+        // The map container is hidden until now, so size it once the modal is visible.
+        setTimeout(function(){
+          ensureMap();
+          if (map){ map.invalidateSize(); marker.setLatLng([lat, lng]); map.setView([lat, lng], 13); }
+        }, 90);
       }
 
       document.getElementById('add-resto').addEventListener('click', function(){ openModal(null); });
@@ -188,9 +240,11 @@
         var d = {
           name: document.getElementById('mr-name').value.trim() || 'Nouveau restaurant',
           tags: document.getElementById('mr-tags').value.trim() || '—',
-          rating: document.getElementById('mr-rating').value.trim() || '0.0',
+          account: document.getElementById('mr-account').value || ACCOUNTS[0],
           status: document.getElementById('mr-status').value,
-          img: currentImg
+          img: currentImg,
+          lat: selected ? selected.lat : DEFAULT_LOC.lat,
+          lng: selected ? selected.lng : DEFAULT_LOC.lng
         };
         if (editing){
           var fresh = buildCard(d);
@@ -199,7 +253,7 @@
           Jebllo.toast('Restaurant mis à jour');
         } else {
           grid.insertBefore(buildCard(d), grid.firstChild);
-          Jebllo.log('create','Restaurant ajouté', d.name + ' a rejoint la plateforme.');
+          Jebllo.log('create','Restaurant ajouté', d.name + ' a rejoint la plateforme (compte : ' + d.account + ').');
           Jebllo.toast('Restaurant ajouté');
         }
         Jebllo.closeModal(modal);
