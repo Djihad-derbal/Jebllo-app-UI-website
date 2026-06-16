@@ -93,11 +93,7 @@
         <div class="field">
           <label>Compte du restaurant</label>
           <input class="input" id="mr-phone" placeholder="Numéro de téléphone — ex. +213 661 23 45 67">
-          <div class="upload__hint">Le restaurant se connecte à l'application avec ce numéro de téléphone et ce mot de passe.</div>
-        </div>
-        <div class="field-row">
-          <div class="field"><label>Mot de passe</label><input class="input" id="mr-pass" type="password" placeholder="••••••••"></div>
-          <div class="field"><label>Confirmer le mot de passe</label><input class="input" id="mr-pass2" type="password" placeholder="••••••••"></div>
+          <div class="upload__hint">Le restaurant se connecte à l'application avec son numéro de téléphone, vérifié par code OTP — aucun mot de passe.</div>
         </div>
         <div class="field"><label>Jours d'ouverture</label><div class="day-row" id="mr-days"></div></div>
         <div class="field-row">
@@ -241,8 +237,6 @@
         document.getElementById('mr-title').textContent = card ? 'Modifier le restaurant' : 'Nouveau restaurant';
         document.getElementById('mr-name').value = card ? card.dataset.name : '';
         document.getElementById('mr-tags').value = card ? card.dataset.tags : '';
-        document.getElementById('mr-pass').value = '';
-        document.getElementById('mr-pass2').value = '';
         document.getElementById('mr-desc').value = card ? (card.dataset.desc || '') : '';
         document.getElementById('mr-phone').value = card ? (card.dataset.phone || '') : '';
         document.getElementById('mr-open').value = card && card.dataset.open ? card.dataset.open : '11:00';
@@ -282,17 +276,9 @@
 
       document.getElementById('mr-save').addEventListener('click', function(){
         var phone = document.getElementById('mr-phone').value.trim();
-        var pass  = document.getElementById('mr-pass').value;
-        var pass2 = document.getElementById('mr-pass2').value;
-        // Creating a new restaurant also creates its login account → require matching credentials.
-        // The restaurant logs in with its phone number + password.
-        if (!editing){
-          if (!phone){ Jebllo.toast('Renseignez le numéro de téléphone du compte', 'danger'); return; }
-          if (!pass){ Jebllo.toast('Définissez un mot de passe', 'danger'); return; }
-          if (pass !== pass2){ Jebllo.toast('Les mots de passe ne correspondent pas', 'danger'); return; }
-        } else if ((pass || pass2) && pass !== pass2){
-          Jebllo.toast('Les mots de passe ne correspondent pas', 'danger'); return;
-        }
+        // Creating a new restaurant also creates its login account.
+        // The restaurant logs in with its phone number, verified by OTP (no password).
+        if (!editing && !phone){ Jebllo.toast('Renseignez le numéro de téléphone du compte', 'danger'); return; }
         var d = {
           name: document.getElementById('mr-name').value.trim() || 'Nouveau restaurant',
           tags: document.getElementById('mr-tags').value.trim() || '—',
