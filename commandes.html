@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -27,6 +29,7 @@
         <a class="nav__item" data-page="commandes.html" href="commandes.html"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Commandes</a>
         <a class="nav__item" data-page="drivers.html" href="drivers.html"><svg class="icon" viewBox="0 0 24 24"><path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v5H3z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>Drivers</a>
         <a class="nav__item" data-page="verifications.html" href="verifications.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 4v5c0 4-3 7-7 8-4-1-7-4-7-8V7z"/></svg>Vérifications<span class="nav__badge" id="nav-pending">3</span></a>
+        <a class="nav__item" data-page="zones.html" href="zones.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 3 3 5.5v15.5l6-2.5 6 2.5 6-2.5V3l-6 2.5z"/><path d="M9 3v15.5M15 5.5V21"/></svg>Zones</a>
         <span class="nav__label">Catalogue</span>
         <a class="nav__item" data-page="restaurant.html" href="restaurant.html"><svg class="icon" viewBox="0 0 24 24"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18"/><path d="M16 3c-1.5 0-3 1.5-3 5s1.5 4 3 4 3-.5 3-4-1.5-5-3-5zM16 12v9"/></svg>Restaurant</a>
         <a class="nav__item" data-page="promotions.html" href="promotions.html"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>Promotions</a>
@@ -37,6 +40,7 @@
         <a class="nav__item" data-page="paiements.html" href="paiements.html"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>Paiements</a>
         <a class="nav__item" data-page="logs.html" href="logs.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5h11M9 12h11M9 19h11"/><circle cx="4" cy="5" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="19" r="1.4"/></svg>Logs</a>
         <span class="nav__label">Système</span>
+        <a class="nav__item" data-page="team.html" href="team.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-6 6.5-6s6.5 2.7 6.5 6"/><path d="M17 4.6a3.2 3.2 0 0 1 0 6.3M21.5 20c0-2.4-1.4-4.5-3.5-5.4"/></svg>&Eacute;quipe</a>
         <a class="nav__item" data-page="settings.html" href="settings.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0 1-2.7"/></svg>Settings</a>
       </nav>
       <div class="sidebar__foot">
@@ -167,11 +171,17 @@
       <div class="od-body">
         <div class="flag" id="od-client-flag" style="display:none"><svg class="icon" viewBox="0 0 24 24"></svg><span></span></div>
         <div class="od-section">
+          <h4>Suivi de la commande</h4>
+          <div class="otrack" id="od-track"></div>
+        </div>
+        <div class="od-section">
           <h4>Adresse de livraison</h4>
           <div class="od-row">
             <span class="od-ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-            <div><div class="od-row__title">Current Location</div><div class="od-row__sub" id="od-address">Cité 200 Logements, Bât B, Blida</div></div>
+            <div><div class="od-row__title">Position exacte du client</div><div class="od-row__sub" id="od-address">Cité 200 Logements, Bât B, Blida</div></div>
           </div>
+          <div class="map-pick map-pick--view" id="od-map" style="margin-top:12px"></div>
+          <div class="map-pick__coords"><span id="od-coords">—</span></div>
         </div>
         <div class="od-section">
           <h4>Destinataire</h4>
@@ -209,20 +219,39 @@
     <div class="modal__box">
       <div class="modal__head"><h3 id="mo-title">Nouvelle commande</h3><button class="modal__close" data-modal-close aria-label="Fermer"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
       <div class="modal__body">
-        <div class="field"><label>Restaurant</label><input class="input" id="mo-resto" placeholder="ex. Chicken Street"></div>
+        <div class="field"><label>Restaurant</label><select class="input" id="mo-resto"></select></div>
         <div class="field-row">
-          <div class="field"><label>Client</label><input class="input" id="mo-customer" placeholder="ex. Yacine B."></div>
+          <div class="field"><label>Client</label><select class="input" id="mo-customer"></select></div>
           <div class="field"><label>Type de client</label><select class="input" id="mo-ctype"><option value="">Régulier</option><option value="new">Nouveau (1ʳᵉ)</option><option value="return">Retour</option></select></div>
         </div>
-        <div class="field"><label>Driver <span style="color:var(--text-faint);font-weight:400">— vide = « Searching… »</span></label><input class="input" id="mo-driver" placeholder="ex. Rachid H."></div>
-        <div class="field-row">
-          <div class="field"><label>Prix (DZD)</label><input class="input" id="mo-price" placeholder="ex. 2 500"></div>
-          <div class="field"><label>Statut</label><select class="input" id="mo-status"><option value="encours">En Cours</option><option value="fini">Fini</option></select></div>
+        <div class="field"><label>Driver <span style="color:var(--text-faint);font-weight:400">— vide = « Searching… »</span></label><select class="input" id="mo-driver"></select></div>
+
+        <div class="field">
+          <label>Produits du menu</label>
+          <div class="upload__hint" style="margin-top:0;margin-bottom:8px">Ajoutez des produits depuis le menu du restaurant. Le prix se calcule automatiquement.</div>
+          <div class="menu-pick" id="mo-menu"></div>
         </div>
+        <div class="field">
+          <label>Articles de la commande</label>
+          <div class="order-lines" id="mo-lines"></div>
+        </div>
+        <div class="order-totals">
+          <div class="line"><span>Sous-total</span><span id="mo-subtotal">0 DZD</span></div>
+          <div class="line"><span>Frais de livraison (DZD)</span><input class="input order-totals__fee" id="mo-delivery" value="150" inputmode="numeric"></div>
+          <div class="line total"><span>Total</span><span id="mo-total">0 DZD</span></div>
+        </div>
+
+        <div class="field">
+          <label>Localisation du client</label>
+          <div class="map-pick" id="mo-map"></div>
+          <div class="map-pick__coords">Cliquez sur la carte ou déplacez le repère · <span id="mo-coords">—</span></div>
+        </div>
+
         <div class="field-row">
           <div class="field"><label>Date</label><input class="input" id="mo-date" placeholder="ex. 13 Juin 2026"></div>
           <div class="field"><label>Heure</label><input class="input" id="mo-time" placeholder="ex. 14:32"></div>
         </div>
+        <div class="field"><label>Statut</label><select class="input" id="mo-status"><option value="encours">En Cours</option><option value="fini">Fini</option></select></div>
       </div>
       <div class="modal__foot"><button class="btn btn--ghost" data-modal-close>Annuler</button><button class="btn btn--lime" id="mo-save">Enregistrer</button></div>
     </div>
@@ -232,7 +261,7 @@
   <script>
     // Per-order mock data, keyed by order id
     var ORDERS = {
-      "ORD-8821": { resto:"Chicken Street Restaurant", address:"Cité 200 Logements, Bât B, Blida", time:"13 Juin 2026 · 14:32",
+      "ORD-8821": { resto:"Chicken Street Restaurant", address:"Cité 200 Logements, Bât B, Blida", lat:36.4703, lng:2.8277, time:"13 Juin 2026 · 14:32", status:"encours",
         client:{type:"return", visits:8},
         recipient:{name:"Yacine Belkacem", phone:"+213 661 23 45 67", avatar:"assets/av-1.svg"},
         driver:{name:"Rachid Hamidi", role:"Driver · Honda PCX", avatar:"assets/av-6.svg", rating:"4.9"},
@@ -240,21 +269,21 @@
                 {img:"assets/food-8.svg", name:"Frites maison", opt:"Large", qty:1, price:"400 DZD"},
                 {img:"assets/food-6.svg", name:"Coca-Cola", opt:"33cl", qty:2, price:"300 DZD"} ],
         totals:{sub:"2 300 DZD", promo:"− 200 DZD", delivery:"150 DZD", taxes:"50 DZD", total:"2 500 DZD"} },
-      "ORD-8820": { resto:"STEACK RESTO", address:"Rue Larbi Tebessi, Blida", time:"13 Juin 2026 · 13:10",
+      "ORD-8820": { resto:"STEACK RESTO", address:"Rue Larbi Tebessi, Blida", lat:36.4725, lng:2.8301, time:"13 Juin 2026 · 13:10", status:"fini",
         client:{type:"return", visits:5},
         recipient:{name:"Lina Kaci", phone:"+213 770 11 22 33", avatar:"assets/av-2.svg"},
         driver:{name:"Mehdi Boudjema", role:"Driver · Yamaha NMAX", avatar:"assets/av-7.svg", rating:"4.7"},
         items:[ {img:"assets/food-2.svg", name:"Steak Frites", opt:"Saignant", qty:1, price:"950 DZD"},
                 {img:"assets/food-6.svg", name:"Coca-Cola", opt:"33cl", qty:2, price:"300 DZD"} ],
         totals:{sub:"1 550 DZD", promo:"− 100 DZD", delivery:"150 DZD", taxes:"200 DZD", total:"1 800 DZD"} },
-      "ORD-8819": { resto:"Pizza Nova", address:"Cité Ben Boulaid, Bloc 12, Blida", time:"12 Juin 2026 · 20:45",
+      "ORD-8819": { resto:"Pizza Nova", address:"Cité Ben Boulaid, Bloc 12, Blida", lat:36.4668, lng:2.8315, time:"12 Juin 2026 · 20:45", status:"encours",
         client:{type:"new", visits:1},
         recipient:{name:"Sofiane Meziane", phone:"+213 661 99 88 77", avatar:"assets/av-3.svg"},
         driver:null,
         items:[ {img:"assets/food-3.svg", name:"Pizza Pepperoni", opt:"Large", qty:1, price:"550 DZD"},
                 {img:"assets/food-7.svg", name:"Pâtes Bolognaise", opt:"", qty:1, price:"650 DZD"} ],
         totals:{sub:"1 200 DZD", promo:"− 0 DZD", delivery:"200 DZD", taxes:"1 800 DZD", total:"3 200 DZD"} },
-      "ORD-8818": { resto:"Tacos Time", address:"Boulevard Mohamed Boudiaf, Blida", time:"12 Juin 2026 · 12:05",
+      "ORD-8818": { resto:"Tacos Time", address:"Boulevard Mohamed Boudiaf, Blida", lat:36.4742, lng:2.8252, time:"12 Juin 2026 · 12:05", status:"fini",
         client:{type:"return", visits:3},
         recipient:{name:"Amel Dahmani", phone:"+213 662 45 67 89", avatar:"assets/av-4.svg"},
         driver:{name:"Walid Zeroual", role:"Driver · Honda PCX", avatar:"assets/av-9.svg", rating:"4.6"},
@@ -266,6 +295,29 @@
     (function(){
       var panel = document.getElementById('order-detail');
       function set(id, val){ var el = document.getElementById(id); if(el) el.textContent = val; }
+
+      // read-only map that pinpoints the client's exact location for the open order
+      var DEFAULT_LOC = { lat: 36.4703, lng: 2.8277 }; // Blida
+      var odMap = null, odMarker = null;
+      function renderClientMap(o){
+        var lat = (o && o.lat != null) ? o.lat : DEFAULT_LOC.lat;
+        var lng = (o && o.lng != null) ? o.lng : DEFAULT_LOC.lng;
+        var coords = document.getElementById('od-coords');
+        if (coords) coords.textContent = lat.toFixed(5) + ', ' + lng.toFixed(5);
+        if (typeof L === 'undefined') return;
+        setTimeout(function(){
+          if (!odMap){
+            odMap = L.map('od-map', { scrollWheelZoom: false }).setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(odMap);
+            odMarker = L.marker([lat, lng]).addTo(odMap);
+          } else {
+            odMarker.setLatLng([lat, lng]);
+          }
+          odMap.invalidateSize();
+          odMap.setView([lat, lng], 15);
+        }, 60);
+      }
+
       function render(code){
         var o = ORDERS[code];
         set('od-code', '#' + code);
@@ -273,6 +325,7 @@
         set('od-resto', o.resto);
         set('od-time', o.time || '');
         set('od-address', o.address);
+        renderClientMap(o);
         document.getElementById('od-recipient-avatar').src = o.recipient.avatar;
         set('od-recipient-name', o.recipient.name);
         set('od-recipient-phone', o.recipient.phone);
@@ -292,7 +345,60 @@
           set('od-driver-name', o.driver.name); set('od-driver-role', o.driver.role); set('od-driver-rating', o.driver.rating);
         } else { dc.style.display='none'; }
         renderClientFlag(o);
+        renderTrack(o);
       }
+
+      // ---- order status timeline (lifecycle of the delivery) ----
+      var TRK_ICON = {
+        placed:    '<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>',
+        confirmed: '<path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18"/><path d="M16 3c-1.5 0-3 1.5-3 5s1.5 4 3 4 3-.5 3-4-1.5-5-3-5zM16 12v9"/>',
+        preparing: '<path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M6 11v8M18 11v8"/>',
+        assigned:  '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>',
+        picked:    '<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/>',
+        route:     '<path d="M3 11l19-9-9 19-2-8-8-2z"/>',
+        delivered: '<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.3 2.3L15.5 9.5"/>'
+      };
+      function pad2(n){ return (n < 10 ? '0' : '') + n; }
+      function fmtMin(m){ m = ((m % 1440) + 1440) % 1440; return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); }
+      function baseMin(t){ var m = (t || '').match(/(\d{1,2}):(\d{2})/); return m ? (+m[1] * 60 + +m[2]) : 12 * 60; }
+
+      function renderTrack(o){
+        var wrap = document.getElementById('od-track');
+        if (!wrap) return;
+        var b = baseMin(o.time);
+        var drv = o.driver ? o.driver.name : null;
+        var client = (o.recipient && o.recipient.name) || 'le client';
+        var resto = o.resto || 'le restaurant';
+        var steps = [
+          { ic:'placed',    t:b,      title:'Commande passée',            sub: client + ' a passé la commande' },
+          { ic:'confirmed', t:b + 2,  title:'Confirmée par le restaurant', sub: resto + ' a accepté la commande' },
+          { ic:'preparing', t:b + 4,  title:'En préparation',              sub:'Le restaurant prépare la commande' },
+          { ic:'assigned',  t:b + 9,  title:'Livreur assigné',             sub: drv ? (drv + ' a accepté la course') : 'Recherche d’un livreur…', searching: !drv },
+          { ic:'picked',    t:b + 17, title:'Commande récupérée',          sub: (drv || 'Le livreur') + ' a récupéré la commande' },
+          { ic:'route',     t:b + 19, title:'En route vers le client',     sub:'Livraison en cours' },
+          { ic:'delivered', t:b + 33, title:'Livrée',                      sub:'Commande remise à ' + client }
+        ];
+        // how far the order has progressed
+        var doneTo, current;
+        if (o.status === 'fini') { doneTo = 6; current = -1; }          // everything delivered
+        else if (o.driver)       { doneTo = 4; current = 5; }           // picked up → on the way
+        else                     { doneTo = 2; current = 3; }           // prepared → searching a driver
+
+        wrap.innerHTML = steps.map(function(s, i){
+          var cls, timeTxt;
+          if (i <= doneTo)      { cls = 'is-done';    timeTxt = fmtMin(s.t); }
+          else if (i === current){ cls = 'is-current'; timeTxt = s.searching ? 'En attente' : fmtMin(s.t); }
+          else                  { cls = 'is-pending'; timeTxt = (s.ic === 'delivered') ? 'Estimée ' + fmtMin(s.t) : 'À venir'; }
+          return '<div class="ostep ' + cls + '">'
+            + '<span class="ostep__dot"><svg class="icon" viewBox="0 0 24 24">' + TRK_ICON[s.ic] + '</svg></span>'
+            + '<div class="ostep__body">'
+            + '<div class="ostep__title">' + s.title + '</div>'
+            + '<div class="ostep__sub">' + s.sub + '</div>'
+            + '<div class="ostep__time">' + timeTxt + '</div>'
+            + '</div></div>';
+        }).join('');
+      }
+
       // first-time vs returning client banner + toast notification
       var STAR = '<path d="M12 2l2.9 6 6.6.6-5 4.3 1.5 6.5L12 16l-6 3.4 1.5-6.5-5-4.3 6.6-.6z"/>';
       var REPEAT = '<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>';
@@ -344,6 +450,112 @@
       var ICON_EDIT = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
       var ICON_DEL = '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
       var editing = null;
+
+      // ---------- catalog: restaurants + their menus, clients, drivers ----------
+      var RESTOS = [
+        {name:'Chicken Street Restaurant', img:'food-1'}, {name:'STEACK RESTO', img:'food-2'},
+        {name:'Pizza Nova', img:'food-3'}, {name:'Tacos Time', img:'food-4'}, {name:'Fried House', img:'food-5'},
+        {name:'Sandwich Bar', img:'food-6'}, {name:'Pasta Club', img:'food-7'}, {name:'Snack Express', img:'food-8'},
+        {name:'Naan Corner', img:'food-9'}
+      ];
+      var MENUS = {
+        'Chicken Street Restaurant':[{name:'Chicken Burger',price:800,img:'food-1'},{name:'Naan Poulet',price:650,img:'food-9'},{name:'Fried Chicken 6 pc',price:1100,img:'food-5'},{name:'Frites maison',price:400,img:'food-8'},{name:'Coca-Cola 33cl',price:150,img:'food-6'}],
+        'STEACK RESTO':[{name:'Steak Frites',price:950,img:'food-2'},{name:'Mixed Grill',price:1500,img:'food-2'},{name:'Burger Maison',price:700,img:'food-1'},{name:'Coca-Cola 33cl',price:150,img:'food-6'}],
+        'Pizza Nova':[{name:'Pizza Margherita',price:550,img:'food-3'},{name:'Pizza Pepperoni',price:650,img:'food-3'},{name:'Pâtes Bolognaise',price:600,img:'food-7'},{name:'Calzone',price:700,img:'food-3'}],
+        'Tacos Time':[{name:'Tacos Poulet',price:800,img:'food-4'},{name:'Tacos Viande',price:900,img:'food-4'},{name:'Sandwich',price:450,img:'food-6'},{name:'Frites',price:250,img:'food-8'}],
+        'Fried House':[{name:'Fried Chicken Bucket',price:1100,img:'food-5'},{name:'Wings 8 pc',price:700,img:'food-5'},{name:'Naan',price:200,img:'food-9'}],
+        'Sandwich Bar':[{name:'Panini Poulet',price:450,img:'food-6'},{name:'Sandwich Thon',price:400,img:'food-6'},{name:'Salade César',price:550,img:'food-6'}],
+        'Pasta Club':[{name:'Lasagnes',price:850,img:'food-7'},{name:'Pâtes Carbonara',price:750,img:'food-7'},{name:'Pizza',price:600,img:'food-3'}],
+        'Snack Express':[{name:'Burger',price:600,img:'food-1'},{name:'Tacos',price:800,img:'food-4'},{name:'Frites',price:250,img:'food-8'}],
+        'Naan Corner':[{name:'Naan Tandoori',price:500,img:'food-9'},{name:'Curry Poulet',price:900,img:'food-9'},{name:'Riz Basmati',price:300,img:'food-9'}]
+      };
+      var CLIENTS = [
+        {name:'Yacine Belkacem',av:'av-1'},{name:'Lina Kaci',av:'av-2'},{name:'Sofiane Meziane',av:'av-3'},
+        {name:'Amel Dahmani',av:'av-4'},{name:'Nadir Khelifi',av:'av-5'},{name:'Sara Cherif',av:'av-8'},
+        {name:'Karim Daoudi',av:'av-10'},{name:'Hana Amrani',av:'av-11'}
+      ];
+      var DRIVERS = [
+        {name:'Rachid Hamidi',av:'av-6',vehicle:'Honda PCX'},{name:'Mehdi Boudjema',av:'av-7',vehicle:'Yamaha NMAX'},
+        {name:'Walid Zeroual',av:'av-9',vehicle:'Honda PCX'},{name:'Karim Daoudi',av:'av-10',vehicle:'Scooter'}
+      ];
+      function avFor(name, list, fallback){ var m = list.find(function(x){ return x.name === name; }); return m ? m.av : fallback; }
+      function imgForResto(name){ var m = RESTOS.find(function(x){ return x.name === name; }); return m ? m.img : 'food-1'; }
+
+      // populate the three selects
+      document.getElementById('mo-resto').innerHTML = RESTOS.map(function(r){ return '<option value="'+r.name+'">'+r.name+'</option>'; }).join('');
+      document.getElementById('mo-customer').innerHTML = '<option value="">Choisir un client…</option>' + CLIENTS.map(function(c){ return '<option value="'+c.name+'">'+c.name+'</option>'; }).join('');
+      document.getElementById('mo-driver').innerHTML = '<option value="">— Searching… (aucun driver) —</option>' + DRIVERS.map(function(dr){ return '<option value="'+dr.name+'">'+dr.name+' · '+dr.vehicle+'</option>'; }).join('');
+
+      // ---------- order line items + automatic price ----------
+      var PLUS = '<svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 5v14M5 12h14"/></svg>';
+      var XICON = '<svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+      var lines = []; // [{name, price(number), qty, img}]
+      function fmtDZD(n){ return Math.round(n).toLocaleString('fr-FR').replace(/[  \s]/g,' ') + ' DZD'; }
+      function deliveryFee(){ var n = parseInt((document.getElementById('mo-delivery').value||'').replace(/\D/g,''),10); return isNaN(n)?0:n; }
+      function subtotal(){ return lines.reduce(function(s,l){ return s + l.price*l.qty; },0); }
+      function computeTotals(){
+        document.getElementById('mo-subtotal').textContent = fmtDZD(subtotal());
+        document.getElementById('mo-total').textContent = fmtDZD(subtotal() + deliveryFee());
+      }
+      function renderMenu(restoName){
+        var box = document.getElementById('mo-menu');
+        var menu = MENUS[restoName] || [];
+        box.dataset.resto = restoName;
+        box.innerHTML = menu.length
+          ? menu.map(function(it, i){
+              return '<div class="menu-pick__item" data-i="'+i+'"><img src="assets/'+it.img+'.svg" alt="">'
+                + '<span class="menu-pick__name">'+it.name+'</span>'
+                + '<span class="menu-pick__price">'+fmtDZD(it.price)+'</span>'
+                + '<button type="button" class="menu-pick__add" aria-label="Ajouter">'+PLUS+'</button></div>';
+            }).join('')
+          : '<div class="order-lines__empty">Aucun menu pour ce restaurant.</div>';
+      }
+      function renderLines(){
+        document.getElementById('mo-lines').innerHTML = lines.length
+          ? lines.map(function(l, i){
+              return '<div class="order-line" data-i="'+i+'"><img src="assets/'+l.img+'.svg" alt="">'
+                + '<span class="order-line__name">'+l.name+'</span>'
+                + '<span class="qty"><button type="button" data-dec aria-label="Moins">−</button><span>'+l.qty+'</span><button type="button" data-inc aria-label="Plus">+</button></span>'
+                + '<span class="order-line__price">'+fmtDZD(l.price*l.qty)+'</span>'
+                + '<button type="button" class="order-line__del" data-del aria-label="Retirer">'+XICON+'</button></div>';
+            }).join('')
+          : '<div class="order-lines__empty">Aucun article. Ajoutez des produits du menu ci-dessus.</div>';
+        computeTotals();
+      }
+      function addLine(item){
+        var ex = lines.find(function(l){ return l.name === item.name && l.price === item.price; });
+        if (ex) ex.qty++; else lines.push({ name:item.name, price:item.price, qty:1, img:item.img });
+        renderLines();
+      }
+      document.getElementById('mo-menu').addEventListener('click', function(e){
+        var btn = e.target.closest('.menu-pick__add'); if (!btn) return;
+        var menu = MENUS[this.dataset.resto] || [];
+        var it = menu[+btn.closest('.menu-pick__item').dataset.i]; if (it) addLine(it);
+      });
+      document.getElementById('mo-lines').addEventListener('click', function(e){
+        var row = e.target.closest('.order-line'); if (!row) return;
+        var i = +row.dataset.i;
+        if (e.target.closest('[data-inc]')) lines[i].qty++;
+        else if (e.target.closest('[data-dec]')) { lines[i].qty--; if (lines[i].qty < 1) lines.splice(i,1); }
+        else if (e.target.closest('[data-del]')) lines.splice(i,1);
+        else return;
+        renderLines();
+      });
+      document.getElementById('mo-delivery').addEventListener('input', computeTotals);
+      document.getElementById('mo-resto').addEventListener('change', function(){ renderMenu(this.value); });
+
+      // ---------- client location picker (Leaflet) ----------
+      var DEFAULT_LOC = { lat: 36.4703, lng: 2.8277 };
+      var moMap = null, moMarker = null, moSel = null;
+      function moSetCoords(lat, lng){ moSel = { lat:lat, lng:lng }; document.getElementById('mo-coords').textContent = lat.toFixed(5)+', '+lng.toFixed(5); }
+      function moEnsureMap(){
+        if (moMap || typeof L === 'undefined') return;
+        moMap = L.map('mo-map', { scrollWheelZoom: true }).setView([DEFAULT_LOC.lat, DEFAULT_LOC.lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(moMap);
+        moMarker = L.marker([DEFAULT_LOC.lat, DEFAULT_LOC.lng], { draggable: true }).addTo(moMap);
+        moMarker.on('dragend', function(){ var p = moMarker.getLatLng(); moSetCoords(p.lat, p.lng); });
+        moMap.on('click', function(e){ moMarker.setLatLng(e.latlng); moSetCoords(e.latlng.lat, e.latlng.lng); });
+      }
 
       function v(id){ return document.getElementById(id).value.trim(); }
       function fill(id, val){ document.getElementById(id).value = val; }
@@ -400,13 +612,20 @@
 
       // build a slide-over detail object so created/edited orders open coherently
       function buildDetail(d){
+        var items = (d.lines && d.lines.length)
+          ? d.lines.map(function(l){ return { img:'assets/'+l.img+'.svg', name:l.name, opt:'', qty:l.qty, price:fmtDZD(l.price*l.qty) }; })
+          : [ { img:'assets/'+d.restoImg+'.svg', name:'Articles de la commande', opt:'', qty:1, price:d.price } ];
+        var sub = (d.lines && d.lines.length) ? d.lines.reduce(function(s,l){ return s+l.price*l.qty; },0) : null;
+        var vehicle = (DRIVERS.find(function(x){ return x.name === d.driver; })||{}).vehicle;
         return {
-          resto: d.resto, address: 'Adresse de livraison, Blida', time: d.date + ' · ' + d.time,
+          resto: d.resto, address: d.address || 'Adresse de livraison, Blida',
+          lat: (d.lat != null ? d.lat : DEFAULT_LOC.lat), lng: (d.lng != null ? d.lng : DEFAULT_LOC.lng),
+          time: d.date + ' · ' + d.time, status: d.status,
           client: d.ctype === 'new' ? { type:'new', visits:1 } : (d.ctype === 'return' ? { type:'return', visits:2 } : null),
           recipient: { name: d.customer, phone: '+213 — — —', avatar: 'assets/'+d.custAv+'.svg' },
-          driver: d.driver ? { name: d.driver, role: 'Driver', avatar: 'assets/'+d.driverAv+'.svg', rating: '4.8' } : null,
-          items: [ { img: 'assets/'+d.restoImg+'.svg', name: 'Articles de la commande', opt: '', qty: 1, price: d.price } ],
-          totals: { sub: d.price, promo: '− 0 DZD', delivery: '—', taxes: '—', total: d.price }
+          driver: d.driver ? { name: d.driver, role: 'Driver' + (vehicle ? ' · ' + vehicle : ''), avatar: 'assets/'+d.driverAv+'.svg', rating: '4.8' } : null,
+          items: items,
+          totals: { sub: sub != null ? fmtDZD(sub) : d.price, promo: '− 0 DZD', delivery: fmtDZD(d.delivery != null ? d.delivery : deliveryFee()), taxes: '0 DZD', total: d.price }
         };
       }
 
@@ -421,11 +640,46 @@
       function openOrderModal(tr){
         editing = tr || null;
         document.getElementById('mo-title').textContent = tr ? 'Modifier la commande' : 'Nouvelle commande';
-        var d = tr ? readRow(tr) : { resto:'', customer:'', ctype:'', driver:'', price:'', date: todayFr(), time: nowHM(), status:'encours' };
-        fill('mo-resto', d.resto); fill('mo-customer', d.customer); fill('mo-ctype', d.ctype);
-        fill('mo-driver', d.driver); fill('mo-price', (d.price || '').replace(/\s*DZD$/i, ''));
-        fill('mo-date', d.date); fill('mo-time', d.time); fill('mo-status', d.status);
+        var code = tr ? (tr.getAttribute('data-order') || '') : '';
+        var detail = (code && window.ORDERS) ? window.ORDERS[code] : null;
+        var d = tr ? readRow(tr) : { resto:RESTOS[0].name, customer:'', ctype:'', driver:'', date: todayFr(), time: nowHM(), status:'encours' };
+
+        // prefer the full names from the saved detail (table cells use abbreviated names)
+        var restoName = (detail && detail.resto) || d.resto;
+        var custName = (detail && detail.recipient && detail.recipient.name) || d.customer;
+        var drvName = (detail && detail.driver && detail.driver.name) || d.driver;
+        document.getElementById('mo-resto').value = MENUS[restoName] ? restoName : RESTOS[0].name;
+        document.getElementById('mo-customer').value = CLIENTS.some(function(c){ return c.name === custName; }) ? custName : '';
+        document.getElementById('mo-ctype').value = d.ctype || '';
+        document.getElementById('mo-driver').value = DRIVERS.some(function(dr){ return dr.name === drvName; }) ? drvName : '';
+        document.getElementById('mo-date').value = d.date;
+        document.getElementById('mo-time').value = d.time;
+        document.getElementById('mo-status').value = d.status;
+
+        // rebuild order line items from the saved detail when editing, else start empty
+        lines = [];
+        if (detail && detail.items){
+          detail.items.forEach(function(it){
+            var qty = it.qty || 1;
+            var num = parseInt(String(it.price).replace(/\D/g,''),10) || 0;
+            lines.push({ name: it.name, price: qty ? Math.round(num/qty) : num, qty: qty, img: (String(it.img).match(/food-\d+/)||['food-1'])[0] });
+          });
+        }
+        document.getElementById('mo-delivery').value = (detail && detail.totals)
+          ? (String(detail.totals.delivery).replace(/\D/g,'') || '150') : '150';
+        renderMenu(document.getElementById('mo-resto').value);
+        renderLines();
+
+        var lat = detail && detail.lat != null ? detail.lat : DEFAULT_LOC.lat;
+        var lng = detail && detail.lng != null ? detail.lng : DEFAULT_LOC.lng;
+        moSetCoords(lat, lng);
+
         Jebllo.openModal(modal);
+        // size the map once the modal is visible
+        setTimeout(function(){
+          moEnsureMap();
+          if (moMap){ moMap.invalidateSize(); moMarker.setLatLng([lat, lng]); moMap.setView([lat, lng], 14); }
+        }, 90);
       }
 
       // give the static rows an actions cell + backfill ORDERS so every row opens a detail
@@ -442,22 +696,33 @@
       });
 
       document.getElementById('mo-save').addEventListener('click', function(){
-        var price = v('mo-price') || '0';
-        if (!/dzd$/i.test(price)) price += ' DZD';
+        var custName = document.getElementById('mo-customer').value;
+        var drvName  = document.getElementById('mo-driver').value;
+        var restoName = document.getElementById('mo-resto').value;
+        if (!custName){ Jebllo.toast('Choisissez un client', 'danger'); return; }
+        if (!lines.length){ Jebllo.toast('Ajoutez au moins un produit du menu', 'danger'); return; }
+        var fee = deliveryFee();
+        var price = fmtDZD(subtotal() + fee);
         var base = editing ? readRow(editing) : {};
+        var prev = (editing && window.ORDERS) ? window.ORDERS[base.code] : null;
         var d = {
-          resto: v('mo-resto') || 'Restaurant',
-          customer: v('mo-customer') || 'Client',
-          ctype: v('mo-ctype'),
-          driver: v('mo-driver'),
+          resto: restoName || 'Restaurant',
+          customer: custName,
+          ctype: document.getElementById('mo-ctype').value,
+          driver: drvName,
           price: price,
+          delivery: fee,
           date: v('mo-date') || todayFr(),
           time: v('mo-time') || nowHM(),
           status: v('mo-status'),
-          restoImg: base.restoImg || pick(FOODS),
-          custAv: base.custAv || pick(AVS),
-          driverAv: base.driverAv || pick(AVS),
-          code: base.code || genCode()
+          restoImg: imgForResto(restoName),
+          custAv: avFor(custName, CLIENTS, base.custAv || 'av-1'),
+          driverAv: avFor(drvName, DRIVERS, base.driverAv || 'av-6'),
+          code: base.code || genCode(),
+          lines: lines.map(function(l){ return { name:l.name, price:l.price, qty:l.qty, img:l.img }; }),
+          lat: moSel ? moSel.lat : DEFAULT_LOC.lat,
+          lng: moSel ? moSel.lng : DEFAULT_LOC.lng,
+          address: prev ? prev.address : 'Adresse de livraison, Blida'
         };
         if (editing) {
           fillRow(editing, d);

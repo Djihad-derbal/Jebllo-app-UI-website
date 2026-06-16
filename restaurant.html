@@ -29,6 +29,7 @@
         <a class="nav__item" data-page="commandes.html" href="commandes.html"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>Commandes</a>
         <a class="nav__item" data-page="drivers.html" href="drivers.html"><svg class="icon" viewBox="0 0 24 24"><path d="M3 13l2-5a3 3 0 0 1 2.8-2h8.4A3 3 0 0 1 19 8l2 5"/><path d="M3 13h18v5H3z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>Drivers</a>
         <a class="nav__item" data-page="verifications.html" href="verifications.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 4v5c0 4-3 7-7 8-4-1-7-4-7-8V7z"/></svg>Vérifications<span class="nav__badge" id="nav-pending">3</span></a>
+        <a class="nav__item" data-page="zones.html" href="zones.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 3 3 5.5v15.5l6-2.5 6 2.5 6-2.5V3l-6 2.5z"/><path d="M9 3v15.5M15 5.5V21"/></svg>Zones</a>
         <span class="nav__label">Catalogue</span>
         <a class="nav__item" data-page="restaurant.html" href="restaurant.html"><svg class="icon" viewBox="0 0 24 24"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18"/><path d="M16 3c-1.5 0-3 1.5-3 5s1.5 4 3 4 3-.5 3-4-1.5-5-3-5zM16 12v9"/></svg>Restaurant</a>
         <a class="nav__item" data-page="promotions.html" href="promotions.html"><svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>Promotions</a>
@@ -39,6 +40,7 @@
         <a class="nav__item" data-page="paiements.html" href="paiements.html"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>Paiements</a>
         <a class="nav__item" data-page="logs.html" href="logs.html"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5h11M9 12h11M9 19h11"/><circle cx="4" cy="5" r="1.4"/><circle cx="4" cy="12" r="1.4"/><circle cx="4" cy="19" r="1.4"/></svg>Logs</a>
         <span class="nav__label">Système</span>
+        <a class="nav__item" data-page="team.html" href="team.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.3 2.9-6 6.5-6s6.5 2.7 6.5 6"/><path d="M17 4.6a3.2 3.2 0 0 1 0 6.3M21.5 20c0-2.4-1.4-4.5-3.5-5.4"/></svg>&Eacute;quipe</a>
         <a class="nav__item" data-page="settings.html" href="settings.html"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0 1-2.7"/></svg>Settings</a>
       </nav>
       <div class="sidebar__foot">
@@ -87,12 +89,22 @@
       <div class="modal__body">
         <div class="field"><label>Nom du restaurant</label><input class="input" id="mr-name" placeholder="ex. Chicken Street Restaurant"></div>
         <div class="field"><label>Cuisine (séparée par ·)</label><input class="input" id="mr-tags" placeholder="ex. Burger · Naan · fried chicken"></div>
+        <div class="field"><label>Description</label><textarea class="input" id="mr-desc" placeholder="Présentation du restaurant, spécialités…"></textarea></div>
         <div class="field">
-          <label>Compte associé</label>
-          <select class="input" id="mr-account"></select>
-          <div class="upload__hint">Ce compte client deviendra le compte du restaurant.</div>
+          <label>Compte du restaurant</label>
+          <input class="input" id="mr-phone" placeholder="Numéro de téléphone — ex. +213 661 23 45 67">
+          <div class="upload__hint">Le restaurant se connecte à l'application avec ce numéro de téléphone et ce mot de passe.</div>
         </div>
-        <div class="field"><label>Status</label><select class="input" id="mr-status"><option value="online">Online</option><option value="offline">Offline</option></select></div>
+        <div class="field-row">
+          <div class="field"><label>Mot de passe</label><input class="input" id="mr-pass" type="password" placeholder="••••••••"></div>
+          <div class="field"><label>Confirmer le mot de passe</label><input class="input" id="mr-pass2" type="password" placeholder="••••••••"></div>
+        </div>
+        <div class="field"><label>Jours d'ouverture</label><div class="day-row" id="mr-days"></div></div>
+        <div class="field-row">
+          <div class="field"><label>Heure d'ouverture</label><input type="time" class="input" id="mr-open" value="11:00"></div>
+          <div class="field"><label>Heure de fermeture</label><input type="time" class="input" id="mr-close" value="23:30"></div>
+        </div>
+        <div class="upload__hint" style="margin:-8px 0 16px">Le statut Online / Offline est géré par le restaurant depuis son application.</div>
         <div class="field">
           <label>Localisation</label>
           <div class="map-pick" id="mr-map"></div>
@@ -123,32 +135,51 @@
       function imgSrc(v){ return (v && (v.indexOf('data:') === 0 || v.indexOf('/') > -1)) ? v : 'assets/' + v + '.svg'; }
       var EDIT = '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
       var DEL  = '<svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
-      var USER = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>';
+      var PHONE = '<svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
+      var CLOCK = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+      // Compact label for the opening days (full week => "Tous les jours").
+      function daysLabel(csv){
+        var arr = (csv || '').split(',').filter(Boolean);
+        return arr.length === 7 ? 'Tous les jours' : arr.join(', ');
+      }
 
-      // Existing client accounts (mirrors the Members page). The chosen one becomes the restaurant's account.
-      var ACCOUNTS = [
-        "Yacine Belkacem","Lina Kaci","Sofiane Meziane","Amel Dahmani","Nadir Khelifi",
-        "Sara Cherif","Karim Daoudi","Hana Amrani","Wassim Zidane"
-      ];
       var DEFAULT_LOC = { lat: 36.4703, lng: 2.8277 }; // Blida
 
-      // Populate the account selector
+      // Opening-days toggles (Mon→Sun). Clicking a chip flips its on/off state.
+      var DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
       (function(){
-        var sel = document.getElementById('mr-account');
-        sel.innerHTML = '<option value="">Choisir un compte client…</option>'
-          + ACCOUNTS.map(function(n){ return '<option value="'+n+'">'+n+'</option>'; }).join('');
+        var row = document.getElementById('mr-days');
+        row.innerHTML = DAYS.map(function(d){
+          return '<button type="button" class="day-chip" data-day="'+d+'">'+d+'</button>';
+        }).join('');
+        row.addEventListener('click', function(e){
+          var chip = e.target.closest('.day-chip');
+          if (chip) chip.classList.toggle('is-on');
+        });
       })();
+      function getDays(){
+        return DAYS.filter(function(d){
+          return document.querySelector('#mr-days [data-day="'+d+'"]').classList.contains('is-on');
+        }).join(',');
+      }
+      function setDays(csv){
+        var on = (csv || '').split(',');
+        DAYS.forEach(function(d){
+          document.querySelector('#mr-days [data-day="'+d+'"]')
+            .classList.toggle('is-on', on.indexOf(d) > -1);
+        });
+      }
 
       var RESTOS = [
-        {name:"Chicken Street Restaurant", tags:"Burger · Naan · fried chicken", account:"Yacine Belkacem", status:"online", img:"food-1", lat:36.4712, lng:2.8290},
-        {name:"STEACK RESTO", tags:"Steak · Grillades · Burger", account:"Lina Kaci", status:"online", img:"food-2", lat:36.7538, lng:3.0588},
-        {name:"Pizza Nova", tags:"Pizza · Pâtes · Calzone", account:"Sofiane Meziane", status:"offline", img:"food-3", lat:36.4680, lng:2.8320},
-        {name:"Tacos Time", tags:"Tacos · Sandwichs · Frites", account:"Amel Dahmani", status:"online", img:"food-4", lat:36.7620, lng:3.0510},
-        {name:"Fried House", tags:"Fried chicken · Wings · Naan", account:"Nadir Khelifi", status:"online", img:"food-5", lat:36.4650, lng:2.8200},
-        {name:"Sandwich Bar", tags:"Sandwichs · Paninis · Salades", account:"Sara Cherif", status:"offline", img:"food-6", lat:36.5900, lng:2.8900},
-        {name:"Pasta Club", tags:"Pâtes · Lasagnes · Pizza", account:"Karim Daoudi", status:"online", img:"food-7", lat:36.7700, lng:3.0600},
-        {name:"Snack Express", tags:"Frites · Burgers · Tacos", account:"Hana Amrani", status:"online", img:"food-8", lat:36.4730, lng:2.8350},
-        {name:"Naan Corner", tags:"Naan · Tandoori · Curry", account:"Wassim Zidane", status:"online", img:"food-9", lat:36.7500, lng:3.0420}
+        {name:"Chicken Street Restaurant", tags:"Burger · Naan · fried chicken", status:"online", img:"food-1", phone:"+213 661 23 45 67", desc:"Burgers et poulet frit maison, pains naan cuits sur place.", days:"Lun,Mar,Mer,Jeu,Ven,Sam,Dim", open:"11:00", close:"23:30", lat:36.4712, lng:2.8290},
+        {name:"STEACK RESTO", tags:"Steak · Grillades · Burger", status:"online", img:"food-2", phone:"+213 770 11 22 33", desc:"Spécialités de viandes grillées et steaks.", days:"Mar,Mer,Jeu,Ven,Sam,Dim", open:"12:00", close:"23:00", lat:36.7538, lng:3.0588},
+        {name:"Pizza Nova", tags:"Pizza · Pâtes · Calzone", status:"offline", img:"food-3", phone:"+213 555 44 55 66", desc:"Pizzas au feu de bois, pâtes fraîches et calzones.", days:"Lun,Mar,Mer,Jeu,Ven,Sam,Dim", open:"11:30", close:"23:30", lat:36.4680, lng:2.8320},
+        {name:"Tacos Time", tags:"Tacos · Sandwichs · Frites", status:"online", img:"food-4", phone:"+213 660 77 88 99", desc:"Tacos généreux, sandwichs et frites maison.", days:"Lun,Mar,Mer,Jeu,Ven,Sam", open:"11:00", close:"00:00", lat:36.7620, lng:3.0510},
+        {name:"Fried House", tags:"Fried chicken · Wings · Naan", status:"online", img:"food-5", phone:"+213 771 33 44 55", desc:"Poulet frit croustillant, wings épicées et naan.", days:"Mer,Jeu,Ven,Sam,Dim", open:"12:00", close:"23:00", lat:36.4650, lng:2.8200},
+        {name:"Sandwich Bar", tags:"Sandwichs · Paninis · Salades", status:"offline", img:"food-6", phone:"+213 556 66 77 88", desc:"Sandwichs frais, paninis chauds et salades.", days:"Lun,Mar,Mer,Jeu,Ven", open:"09:00", close:"20:00", lat:36.5900, lng:2.8900},
+        {name:"Pasta Club", tags:"Pâtes · Lasagnes · Pizza", status:"online", img:"food-7", phone:"+213 661 99 00 11", desc:"Pâtes italiennes, lasagnes maison et pizzas.", days:"Mar,Mer,Jeu,Ven,Sam,Dim", open:"11:30", close:"23:00", lat:36.7700, lng:3.0600},
+        {name:"Snack Express", tags:"Frites · Burgers · Tacos", status:"online", img:"food-8", phone:"+213 770 22 33 44", desc:"Restauration rapide : frites, burgers et tacos.", days:"Lun,Mar,Mer,Jeu,Ven,Sam,Dim", open:"10:00", close:"00:00", lat:36.4730, lng:2.8350},
+        {name:"Naan Corner", tags:"Naan · Tandoori · Curry", status:"online", img:"food-9", phone:"+213 555 88 99 00", desc:"Cuisine indienne : naan, tandoori et currys.", days:"Mar,Jeu,Ven,Sam,Dim", open:"12:00", close:"22:30", lat:36.7500, lng:3.0420}
       ];
 
       function buildCard(d){
@@ -156,8 +187,13 @@
         card.className = 'resto-card';
         card.setAttribute('data-filter-item','');
         card.setAttribute('data-removable','');
-        card.dataset.name = d.name; card.dataset.tags = d.tags; card.dataset.account = d.account || '';
+        card.dataset.name = d.name; card.dataset.tags = d.tags;
         card.dataset.status = d.status; card.dataset.img = d.img;
+        card.dataset.desc = d.desc || '';
+        card.dataset.phone = d.phone || '';
+        card.dataset.days = d.days || '';
+        card.dataset.open = d.open || '';
+        card.dataset.close = d.close || '';
         card.dataset.lat = (d.lat != null ? d.lat : '');
         card.dataset.lng = (d.lng != null ? d.lng : '');
         var statusPill = d.status === 'online'
@@ -173,7 +209,10 @@
           + '<div class="resto-card__body">'
           + '<div class="resto-card__name">'+d.name+'</div>'
           + '<div class="resto-card__tags">'+d.tags+'</div>'
-          + '<div class="resto-card__foot"><span class="resto-card__owner">'+USER+'<span>'+(d.account || '—')+'</span></span>'
+          + (d.open && d.close
+              ? '<div class="resto-card__hours">'+CLOCK+'<span><b>'+d.open+'–'+d.close+'</b>'+(d.days ? ' · '+daysLabel(d.days) : '')+'</span></div>'
+              : '')
+          + '<div class="resto-card__foot"><span class="resto-card__owner">'+PHONE+'<span>'+(d.phone || '—')+'</span></span>'
           + '<a href="restaurant-detail.html">Voir le menu →</a></div></div>';
         return card;
       }
@@ -202,8 +241,13 @@
         document.getElementById('mr-title').textContent = card ? 'Modifier le restaurant' : 'Nouveau restaurant';
         document.getElementById('mr-name').value = card ? card.dataset.name : '';
         document.getElementById('mr-tags').value = card ? card.dataset.tags : '';
-        document.getElementById('mr-account').value = card ? (card.dataset.account || '') : '';
-        document.getElementById('mr-status').value = card ? card.dataset.status : 'online';
+        document.getElementById('mr-pass').value = '';
+        document.getElementById('mr-pass2').value = '';
+        document.getElementById('mr-desc').value = card ? (card.dataset.desc || '') : '';
+        document.getElementById('mr-phone').value = card ? (card.dataset.phone || '') : '';
+        document.getElementById('mr-open').value = card && card.dataset.open ? card.dataset.open : '11:00';
+        document.getElementById('mr-close').value = card && card.dataset.close ? card.dataset.close : '23:30';
+        setDays(card ? card.dataset.days : '');
         currentImg = card ? card.dataset.img : 'food-1';
         document.getElementById('mr-preview').src = imgSrc(currentImg);
         document.getElementById('mr-file').value = '';
@@ -237,11 +281,29 @@
       });
 
       document.getElementById('mr-save').addEventListener('click', function(){
+        var phone = document.getElementById('mr-phone').value.trim();
+        var pass  = document.getElementById('mr-pass').value;
+        var pass2 = document.getElementById('mr-pass2').value;
+        // Creating a new restaurant also creates its login account → require matching credentials.
+        // The restaurant logs in with its phone number + password.
+        if (!editing){
+          if (!phone){ Jebllo.toast('Renseignez le numéro de téléphone du compte', 'danger'); return; }
+          if (!pass){ Jebllo.toast('Définissez un mot de passe', 'danger'); return; }
+          if (pass !== pass2){ Jebllo.toast('Les mots de passe ne correspondent pas', 'danger'); return; }
+        } else if ((pass || pass2) && pass !== pass2){
+          Jebllo.toast('Les mots de passe ne correspondent pas', 'danger'); return;
+        }
         var d = {
           name: document.getElementById('mr-name').value.trim() || 'Nouveau restaurant',
           tags: document.getElementById('mr-tags').value.trim() || '—',
-          account: document.getElementById('mr-account').value || ACCOUNTS[0],
-          status: document.getElementById('mr-status').value,
+          desc: document.getElementById('mr-desc').value.trim(),
+          phone: phone || (editing ? editing.dataset.phone : '') || '—',
+          days: getDays(),
+          open: document.getElementById('mr-open').value,
+          close: document.getElementById('mr-close').value,
+          // Status is shown only — the restaurant controls it from their app.
+          // Keep the existing value when editing; new restaurants default to online.
+          status: editing ? (editing.dataset.status || 'online') : 'online',
           img: currentImg,
           lat: selected ? selected.lat : DEFAULT_LOC.lat,
           lng: selected ? selected.lng : DEFAULT_LOC.lng
@@ -253,8 +315,8 @@
           Jebllo.toast('Restaurant mis à jour');
         } else {
           grid.insertBefore(buildCard(d), grid.firstChild);
-          Jebllo.log('create','Restaurant ajouté', d.name + ' a rejoint la plateforme (compte : ' + d.account + ').');
-          Jebllo.toast('Restaurant ajouté');
+          Jebllo.log('create','Restaurant ajouté', d.name + ' a rejoint la plateforme (compte : ' + d.phone + ').');
+          Jebllo.toast('Restaurant et compte créés');
         }
         Jebllo.closeModal(modal);
       });
